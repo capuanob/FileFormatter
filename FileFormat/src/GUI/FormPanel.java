@@ -15,8 +15,12 @@ import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
+import javafx.scene.control.Alert;
+
 
 /**
  * 
@@ -37,6 +41,7 @@ public class FormPanel extends JPanel {
 	private FormListener formListener;
 	private StringListener stringListener;
 	
+	private Alert alert;
 	/**
 	 *  Sets local formListener property
 	 * @param formListener: The new formListener to use
@@ -76,28 +81,30 @@ public class FormPanel extends JPanel {
 				FileLoader fl = new FileLoader((JButton) e.getSource());
 				loadedFile = fl.getInputFile();
 				
-				if (!loadedFile.canRead()) { // File privileges prevent us from using this file.
-					loadedFile = null;
-				}
-				
 				if (loadedFile != null) {
 					inputPath.setText(loadedFile.getPath());
-				} else {
-					inputPath.setText("");
-				}
-				
-				if (stringListener != null) {
 					
-					Path filePath = Paths.get(loadedFile.getAbsolutePath());
-					List<String> lines = null;
-					
-					try {
-						lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
-					} catch (IOException e1) {
-						e1.printStackTrace();
+					if (!loadedFile.canRead()) { // File privileges prevent us from using this file.
+						loadedFile = null;
+						JOptionPane.showMessageDialog(null, "Lack privileges to read file.");
 					}
 					
-					stringListener.inputFileChosen(lines);
+					if (stringListener != null) {
+						
+						Path filePath = Paths.get(loadedFile.getAbsolutePath());
+						List<String> lines = null;
+						
+						try {
+							lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+						} catch (IOException e1) {
+							e1.printStackTrace();
+						}
+						
+						stringListener.inputFileChosen(lines);
+					}
+					
+				} else {
+					inputPath.setText("");
 				}
 			}
 		});
@@ -132,6 +139,10 @@ public class FormPanel extends JPanel {
 					if (formListener != null) {
 						formListener.formEventOccurred(ev);
 					}
+				} else {
+					String error = (loadedFile == null) ? "Input file could not be found.\n" : "";
+					error += (oPathString.isEmpty()) ? "Output path cannot be empty." : "";
+					JOptionPane.showMessageDialog(null, error);
 				}
 			}
 			

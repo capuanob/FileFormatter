@@ -85,16 +85,6 @@ public class Alignment extends Format {
         return format( inputString, new StringBuffer(), null).toString();
     }
 
-    public static void main(String[] args) 
-    {
-        String sampleText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt "
-                + "ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris "
-                + "nisi ut aliquip ex ea commodo consequat.";
-     
-        Alignment util = new Alignment( alignTypes.RIGHT);
-        System.out.println( util.format(sampleText) );
-    }
-
 	@Override
 	public Object parseObject(String source, ParsePosition pos) {
 		// TODO Auto-generated method stub

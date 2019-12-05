@@ -1,12 +1,6 @@
 package GUI;
 
 import java.awt.BorderLayout;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -45,7 +39,6 @@ public class MainFrame extends JFrame {
 					inputFileContents = content;
 					content.forEach(line -> textPanel.appendText(line));
 				}
-				
 			}
 		});
 		
@@ -59,6 +52,10 @@ public class MainFrame extends JFrame {
 				
 				System.out.println(outputPath);
 				System.out.println(newFileName);
+				
+				if (inputFileContents != null) { // If we have access to the lines of file input...
+					
+				}
 				///TODO: CALL TO MAIN FUNCTIONALITY GOES HERE, THEN SET A NEW LIST<STRING> EQUAL TO RETURN
 				
 				///TODO: POPULATE TEXTPANEL WITH FORMATTED CONTENT
@@ -70,7 +67,6 @@ public class MainFrame extends JFrame {
 		});
 		
 		add(formPanel, BorderLayout.WEST);
-//		add(programDescription, BorderLayout.NORTH);
 		add(textPanel, BorderLayout.CENTER);
 		
 		setSize(950, 600); // Default window size, can be expanded or closed. 
