@@ -1,9 +1,12 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
+import PageFormater.*;
+import PageFormater.Alignment.alignTypes;
 
 /**
  * 
@@ -16,7 +19,7 @@ public class MainFrame extends JFrame {
 	
 	private TextPanel textPanel;
 	private FormPanel formPanel;
-	private List<String> inputFileContents;
+	private String inputFileContents;
 	
 	/**
 	 *  Default constructor for main frame.
@@ -30,14 +33,13 @@ public class MainFrame extends JFrame {
 		formPanel = new FormPanel();
 		inputFileContents = null;
 		
-		
 		//TODO: Establish a StringListener when inputPath has been written.
 		
 		formPanel.setStringListener(new StringListener() {
-			public void inputFileChosen(List<String> content) {
+			public void inputFileChosen(String content) {
 				if (content != null) {
 					inputFileContents = content;
-					content.forEach(line -> textPanel.appendText(line));
+					textPanel.appendText(inputFileContents);
 				}
 			}
 		});
@@ -54,6 +56,27 @@ public class MainFrame extends JFrame {
 				System.out.println(newFileName);
 				
 				if (inputFileContents != null) { // If we have access to the lines of file input...
+					
+					//String[] paragraphs = inputFileContents.split("\n"); // Flags are own paragraphs
+					
+					/*
+					for (String paragraph: paragraphs) {
+						
+						ArrayList<String> formattedParagraph = AppDriver.preProcess(paragraph);
+						System.out.println(formattedParagraph);						
+					}
+					*/
+					
+					inputFileContents.
+					AppDriver.driver(inputFileContents);
+					
+					textPanel.clearContent();
+					
+					
+					//OUTPUT TO FILE
+					
+					
+					
 					
 				}
 				///TODO: CALL TO MAIN FUNCTIONALITY GOES HERE, THEN SET A NEW LIST<STRING> EQUAL TO RETURN

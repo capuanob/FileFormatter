@@ -18,11 +18,14 @@ public class Alignment extends Format {
         LEFT, CENTER, RIGHT, CTITLE
     }
 
+    public int check = 0;
+
 	private int lineLength;
 
 	public Alignment( alignTypes myAlignment) {
         switch ( myAlignment) {
         
+        	case CTITLE:
             case LEFT:
             case CENTER:
             case RIGHT:
@@ -75,6 +78,28 @@ public class Alignment extends Format {
             			outputStrings.append(' ');
                 	}
                     break;
+                case CTITLE:
+                    if( check == 0)
+                    {
+                        check = 1;
+                        int toAdd1 = lineLength - expected.length();
+                        for (int i = 0; i < toAdd1 / 2; i++){
+                            outputStrings.append(' ');
+                        }
+                        outputStrings.append(expected);
+                        for (int i = 0; i < toAdd1 - toAdd1 / 2; i++){
+                            outputStrings.append(' ');
+                        }
+                        break;
+                    }
+                    else if( check == 1)
+                    {
+                        outputStrings.append(expected);
+                        for (int i = 0; i < lineLength - expected.length(); i++){
+                            outputStrings.append(' ');
+                        }
+                        break;
+                    }
                 }
                 outputStrings.append("\n");
         }
@@ -84,6 +109,7 @@ public class Alignment extends Format {
     String format(String inputString) {
         return format( inputString, new StringBuffer(), null).toString();
     }
+
 
 	@Override
 	public Object parseObject(String source, ParsePosition pos) {

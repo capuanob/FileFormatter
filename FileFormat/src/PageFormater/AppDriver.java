@@ -5,16 +5,17 @@ import java.awt.List;
 import java.util.ArrayList;
 
 public class AppDriver {
-	public static void driver(ArrayList<String> lines) {
+	
+	public static void driver(String lines) {
 		//Original text in ArrayList
-		ArrayList<String> text = new ArrayList<String>();
+		String text = lines;
 		//-----------------------------------
 			
 		
 		//text and commands will be separated by flags 
 		//in the middle of paragraphs
-		ArrayList<ArrayList<String>> textList = new ArrayList<ArrayList<String>>();
-		ArrayList<ArrayList<Character>> commandList = new ArrayList<ArrayList<Character>>();
+		ArrayList<String> textList = new ArrayList<String>();
+		ArrayList<Character> commandList = new ArrayList<Character>();
 		
 		//initialize first List in ArrayList
 		textList.add(new ArrayList<String>());
@@ -44,6 +45,12 @@ public class AppDriver {
 			}
 			i ++;
 		}//end of while
+		
+		
+		
+		System.out.println(commandList);
+		System.out.println("-----");
+		System.out.println(textList);
 		
 		int a = 0; //tracking block #
 		int b = 0; //tracking individual block command elements
@@ -146,8 +153,40 @@ public class AppDriver {
 				}//end of switch
 				b ++;
 			}
-			a ++;
+			a++;
 
 		}//end of while
+	} //end driver
+	
+	/**
+	 * This function merges lines to ensure all lines are 80 characters long (when possible). It also reduces lines longer than 80 characters to at most 80 characters
+	 * @param lines
+	 * @return
+	 */
+	public static ArrayList<String> preProcess(String fileBuffer) {
+		ArrayList<String> lines = new ArrayList<String>(); 
+		String[] words = fileBuffer.split(" "); // All words in file
+		
+		// Account for original spaces between words, as whitespace matters!
+		for (int i = 0; i < words.length - 1; i++) {
+			words[i].replace("\n", "");
+			words[i] += " ";
+		}
+   		
+   		int startIndex = 0;
+   
+		while (!fileBuffer.isEmpty()) {
+			String validLine = "";
+          
+			for (int i = startIndex; i < words.length && validLine.length() + words[i].length() <= 80; i++) {
+				validLine += words[i];
+                startIndex++;
+			}
+          
+			lines.add(validLine);
+			fileBuffer = fileBuffer.substring(validLine.length());
+		}
+   
+		return lines;
 	}
 }

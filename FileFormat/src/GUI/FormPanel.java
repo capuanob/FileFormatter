@@ -93,14 +93,16 @@ public class FormPanel extends JPanel {
 						
 						Path filePath = Paths.get(loadedFile.getAbsolutePath());
 						List<String> lines = null;
-						
+						String fileContent = "";
 						try {
+							byte[] encoded = Files.readAllBytes(filePath);
+							fileContent = new String(encoded, StandardCharsets.UTF_8);
 							lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
 						
-						stringListener.inputFileChosen(lines);
+						stringListener.inputFileChosen(fileContent);
 					}
 					
 				} else {

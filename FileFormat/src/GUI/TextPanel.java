@@ -39,4 +39,11 @@ public class TextPanel extends JPanel {
 			this.textArea.append(text + "\n");
 		}
 	}
+	
+	/**
+	 * Clears textArea content
+	 */
+	public void clearContent() {
+		this.textArea.setText("");
+	}
 }
