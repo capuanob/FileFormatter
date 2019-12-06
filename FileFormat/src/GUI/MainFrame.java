@@ -1,12 +1,16 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JFrame;
-import PageFormater.*;
-import PageFormater.Alignment.alignTypes;
+
+import PageFormater.AppDriver;
 
 /**
  * 
@@ -67,14 +71,25 @@ public class MainFrame extends JFrame {
 					}
 					*/
 					
-					inputFileContents.
-					AppDriver.driver(inputFileContents);
+					ArrayList<String> formattedLines = AppDriver.Driver(inputFileContents);
 					
 					textPanel.clearContent();
 					
-					
+					for (String formattedLine: formattedLines) {
+						textPanel.appendText(formattedLine);
+					}
 					//OUTPUT TO FILE
 					
+					
+					try {
+						File outputFile = new File(outputPath, newFileName + ".txt");
+						outputFile.createNewFile();
+						Path filePath = Paths.get(outputPath + "/" + newFileName + ".txt");
+						Files.write(filePath, formattedLines, StandardCharsets.UTF_8);
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 					
 					

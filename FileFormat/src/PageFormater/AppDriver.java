@@ -4,48 +4,67 @@ package PageFormater;
 import java.awt.List;
 import java.util.ArrayList;
 
+import PageFormater.*;
+import PageFormater.Alignment.alignTypes;
+
 public class AppDriver {
 	
-	public static void driver(String lines) {
-		//Original text in ArrayList
-		String text = lines;
-		//-----------------------------------
-			
+	public static ArrayList<String> Driver(String str) {
 		
-		//text and commands will be separated by flags 
+		Alignment aligner;
+		Spacing spacer;
+		
+		ArrayList<String> formattedLines = new ArrayList<String>();
+		
+		//Original text in ArrayList
+		String text = str;
+		text += "\n";
+		//-----------------------------------
+		//text and commands will be separated by flags
 		//in the middle of paragraphs
 		ArrayList<String> textList = new ArrayList<String>();
-		ArrayList<Character> commandList = new ArrayList<Character>();
+		ArrayList<ArrayList<Character>> commandList = new ArrayList<ArrayList<Character>>();
 		
 		//initialize first List in ArrayList
-		textList.add(new ArrayList<String>());
+		textList.add("");
 		commandList.add(new ArrayList<Character>());
 		
 		//showing the previous data type
-		Boolean wasCommand = true;
+		Boolean isString = false;
+		Boolean isCommand = false;
 		
-		int i = 0; //tracking original text
-		int j = 0; //tracking block of separated text
-		while (i < text.size()) {
+		int i = 0; //tracking original string
+		int j = 0; //tracking block (arraylist of string)
+		while (i < text.length() - 1) {
 			
-			//we separate text when we get a command after text
-			if (text.get(i).charAt(0) == '-' && wasCommand) {
-				commandList.get(j).add(text.get(i).charAt(1));
+			//we separate text when we get a new paragraph
+			//after a newline, if its a "-*" following a newline, its a command
+			
+			if (text.charAt(i) == '-' && !isCommand && !isString) {
+				commandList.get(j).add(text.charAt(i+1));
+				isCommand = true;
 			}
-			else if (text.get(i).charAt(0) == '-' && !wasCommand) {
+			//new line after command
+			else if (text.charAt(i) == '\n' && isCommand) {
+				isCommand = false;
+			}
+			//new line after string, separate
+			else if (text.charAt(i) == '\n' && !isCommand && isString) {
 				commandList.add(new ArrayList<Character>());
-				textList.add(new ArrayList<String>());
+				textList.add("");
 				j ++;
-				commandList.get(j).add(text.get(i).charAt(1));
-				wasCommand = true;
+				isCommand = false;
+				isString = false;
 			}
-			else {
-				textList.get(j).add(text.get(i));
-				wasCommand = false;
+			//string
+			else if (text.charAt(i) != '\n' && !isCommand){
+				String temp = textList.get(j);
+				temp += text.charAt(i);
+				textList.set(j, temp);
+				isString = true;
 			}
 			i ++;
 		}//end of while
-		
 		
 		
 		System.out.println(commandList);
@@ -53,100 +72,65 @@ public class AppDriver {
 		System.out.println(textList);
 		
 		int a = 0; //tracking block #
-		int b = 0; //tracking individual block command elements
 		char choice;
 		while (a < commandList.size()) {
+			int b = 0; //tracking individual block command elements
 			while (b < commandList.get(a).size()) {
 				choice = commandList.get(a).get(b);
 				switch (choice) {
 					//Alignment
 					case 'l':
 						//left justification
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).leftJust()
-							//----------------------
-						}
+						aligner = new Alignment(alignTypes.LEFT);
+							formattedLines.add(aligner.format(textList.get(a)));
 						break;
 					case 'r':
 						//right justification
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).rightJust()
-							//--------------------------------
-						}
+						aligner = new Alignment(alignTypes.RIGHT);
+						formattedLines.add(aligner.format(textList.get(a)));
 						break;
 					case 'c':
 						//center justification
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).centerJust()
-							//--------------------------------
-						}
+						aligner = new Alignment(alignTypes.CENTER);
+						formattedLines.add(aligner.format(textList.get(a)));
 						break;
 					case 't':
 						//centered title
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).centerTitle()
-							//--------------------------------
-						}
+						aligner = new Alignment(alignTypes.CTITLE);
+						formattedLines.add(aligner.format(textList.get(a)));
 						break;
 						
 					//Spacing
 					case 's':
 						//single space
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).single()
-							//--------------------------------
-						}
+						spacer = new Spacing(textList);
+						ArrayList<String> formattedParagaph =  spacer.singleSpace();
+						formattedLines.add(formattedParagaph.get(a));
 						break;
 					case 'd':
 						//double space
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).double()
-							//--------------------------------
-						}
+						spacer = new Spacing(textList);
+						ArrayList<String> formattedParagraph = spacer.doubleSpace();
+						formattedLines.add(formattedParagraph.get(a));
 						break;
 						
 					//Indentation
 					case 'i':
 						//first line 5 spaces
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).firstLine()
-							//--------------------------------
-						}
 						break;
 					case 'b':
 						//multiple line 10 spaces
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).Lines()
-							//--------------------------------
-						}
 						break;
 					case 'n':
 						//remove indentation
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).rmInden()
-							//--------------------------------
-						}
 						break;
 					case '2':
 						//create 2 columns, 35 char each, 10 char padding
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).2Col()
-							//--------------------------------
-						}
-						break;
 					case '1':
 						//create 1 column
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).1Col()
-							//--------------------------------
-						}
 						break;
 					case 'e':
 						//insert a blank line
-						for (int x = 0; x < textList.get(a).size(); x++) {
-							//textList.get(a).get(x).insert()
-							//--------------------------------
-						}
 						break;
 					default:
 						break;
@@ -156,6 +140,8 @@ public class AppDriver {
 			a++;
 
 		}//end of while
+		
+		return formattedLines;
 	} //end driver
 	
 	/**
